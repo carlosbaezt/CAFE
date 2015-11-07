@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="cedula" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select usuariovacante.cedula,vacante.cargo,empresa.nombre as nombre_Empresa,ciudad.nombre as nombre_Ciudad
+
+from usuariovacante
+
+inner join vacante on
+usuariovacante.id_vacante = vacante.id
+
+inner join empresa on
+empresa.nit = vacante.nit
+
+inner join ciudad on
+vacante.ciudad = ciudad.ciudad
+
+where usuariovacante.cedula = $P{cedula}]]>
+	</queryString>
+	<field name="cedula" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cargo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre_Empresa" class="java.lang.String"/>
+	<field name="nombre_Ciudad" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="199" y="5" width="239" height="62"/>
+				<imageExpression><![CDATA["C:\\Users\\Carlos Baez\\Google Drive\\Agencia de empleo CAFE\\src\\Vista\\Imagenes\\empleo logo - copia.jpg"]]></imageExpression>
+			</image>
+			<textField pattern="eeee dd mm yyyy">
+				<reportElement x="455" y="0" width="100" height="20" />
+				<textFieldExpression><![CDATA[new java.util.Date().toString()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="72" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="72" />
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="23"/>
+				</textElement>
+				<text><![CDATA[Reporte de las vacantes inscritas por un usuario]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" />
+				<text><![CDATA[cedula]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="152" y="0" width="100" height="20"/>
+				<text><![CDATA[cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="286" y="0" width="113" height="20"/>
+				<text><![CDATA[Nombre de la empresa:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="434" y="0" width="100" height="20"/>
+				<text><![CDATA[Ciudad:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" />
+				<textFieldExpression><![CDATA[$F{cedula}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="152" y="0" width="100" height="20"/>
+				<textFieldExpression><![CDATA[$F{cargo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="286" y="0" width="113" height="20"/>
+				<textFieldExpression><![CDATA[$F{nombre_Empresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="434" y="0" width="100" height="20"/>
+				<textFieldExpression><![CDATA[$F{nombre_Ciudad}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

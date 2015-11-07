@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="nit" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select vacante.id,empresa.nombre,vacante.cargo,ciudad.nombre as nombre_ciudad,vacante.salario from vacante inner join empresa on vacante.nit = empresa.nit inner join ciudad on vacante.ciudad = ciudad.ciudad where vacante.nit = $P{nit}]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cargo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre_ciudad" class="java.lang.String"/>
+	<field name="salario" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="187" y="4" width="186" height="70" />
+				<imageExpression><![CDATA["src/Vista/Imagenes/empleo logo - copia.jpg"]]></imageExpression>
+			</image>
+			<textField pattern="eeee dd mm yyyy">
+				<reportElement x="455" y="0" width="100" height="20" />
+				<textFieldExpression><![CDATA[new java.util.Date().toString()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="170" y="0" width="300" height="20" />
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Comic Sans MS" size="14"/>
+				</textElement>
+				<text><![CDATA[Reporte de vacante por una empresa]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="2" width="11" height="20" />
+				<text><![CDATA[id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="2" width="100" height="20" />
+				<text><![CDATA[nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="164" y="2" width="100" height="20"/>
+				<text><![CDATA[cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="294" y="2" width="100" height="20"/>
+				<text><![CDATA[nombre_ciudad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="2" width="100" height="20"/>
+				<text><![CDATA[salario]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="29" splitType="Stretch">
+			<textField>
+				<reportElement x="2" y="0" width="33" height="20" />
+				<textFieldExpression><![CDATA[$F{id}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="47" y="0" width="100" height="20"/>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="164" y="3" width="100" height="20"/>
+				<textFieldExpression><![CDATA[$F{cargo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="294" y="0" width="100" height="20"/>
+				<textFieldExpression><![CDATA[$F{nombre_ciudad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="1" width="100" height="20"/>
+				<textFieldExpression><![CDATA[$F{salario}.toString()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
