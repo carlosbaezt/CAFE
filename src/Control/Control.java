@@ -329,7 +329,7 @@ public class Control {
         vacantes.getTxtCargo().setEnabled(true);
         vacantes.getTxtIDVacante().setEnabled(true);
         
-        vacantes.getTxtNombreVacante().setEnabled(true);
+
         vacantes.getTxtSalario().setEnabled(true);
         vacantes.getBtnBorrar().setEnabled(true);
         vacantes.getBtnCancelar().setEnabled(true);
@@ -343,7 +343,7 @@ public class Control {
         String res5 = vacantes.getTblResultados().getModel().getValueAt(r, 4).toString();
         String res6 = vacantes.getTblResultados().getModel().getValueAt(r, 5).toString();
         vacantes.getTxtIDVacante().setText(res1);
-        vacantes.getTxtNit().setText(res2);
+        
         vacantes.getTxtCargo().setText(res3);
         vacantes.getTxtSalario().setText(res5);
     }
@@ -357,7 +357,7 @@ public class Control {
             vacantes.getTxtCargo().setText("");
             vacantes.getTxtIDVacante().setText("");
         
-            vacantes.getTxtNombreVacante().setText("");
+
             vacantes.getTxtSalario().setText("");
             vacantes.getBtnBorrar().setEnabled(false);
             vacantes.getBtnCancelar().setEnabled(false);
@@ -368,7 +368,7 @@ public class Control {
             vacantes.getTxtCargo().setText("");
             vacantes.getTxtIDVacante().setText("");
         
-            vacantes.getTxtNombreVacante().setText("");
+
             vacantes.getTxtSalario().setText("");
             vacantes.getBtnBorrar().setEnabled(false);
             vacantes.getBtnCancelar().setEnabled(false);
@@ -382,9 +382,9 @@ public class Control {
             idVacante = Integer.parseInt(vacantes.getTxtIDVacante().getText());
             salario = Double.parseDouble(vacantes.getTxtSalario().getText());
             
-            nitEmpresa = Integer.parseInt(vacantes.getTxtNit().getText());
+            //nitEmpresa = Integer.parseInt(vacantes.getTxtNit().getText());
             cargo = vacantes.getTxtCargo().getText();
-            nombre = vacantes.getTxtNombreVacante().getText();
+            
             int rows = ciudad.obtenerCiudad().getRowCount();
             String[] datos = new String[rows];
             ResultSet rs = ciudad.obtenerTodo();
@@ -402,8 +402,8 @@ public class Control {
             vacantes.getTblResultados().setModel(vacante.obtenerVacante());
             vacantes.getTxtCargo().setText("");
             vacantes.getTxtIDVacante().setText("");
-            vacantes.getTxtNit().setText("");
-            vacantes.getTxtNombreVacante().setText("");
+            
+
             vacantes.getTxtSalario().setText("");
             vacantes.getBtnBorrar().setEnabled(false);
             vacantes.getBtnCancelar().setEnabled(false);
@@ -417,9 +417,9 @@ public class Control {
             double salario;
             idVacante = Integer.parseInt(vacantes.getTxtIDVacante().getText());
             salario = Double.parseDouble(vacantes.getTxtSalario().getText());
-            nitEmpresa = Integer.parseInt(vacantes.getTxtNit().getText());
+            
             cargo = vacantes.getTxtCargo().getText();
-            nombre = vacantes.getTxtNombreVacante().getText();
+
             int rows = ciudad.obtenerCiudad().getRowCount();
             String[] datos = new String[rows];
             ResultSet rs = ciudad.obtenerTodo();
@@ -437,8 +437,8 @@ public class Control {
             vacantes.getTblResultados().setModel(vacante.obtenerVacante());
             vacantes.getTxtCargo().setText("");
             vacantes.getTxtIDVacante().setText("");
-            vacantes.getTxtNit().setText("");
-            vacantes.getTxtNombreVacante().setText("");
+            
+
             vacantes.getTxtSalario().setText("");
             vacantes.getBtnBorrar().setEnabled(false);
             vacantes.getBtnCancelar().setEnabled(false);
@@ -449,8 +449,8 @@ public class Control {
         } else if (e.getSource() == vacantes.getBtnNueva()) {
             vacantes.getTxtCargo().setEnabled(true);
             vacantes.getTxtIDVacante().setEnabled(true);
-            vacantes.getTxtNit().setEnabled(true);
-            vacantes.getTxtNombreVacante().setEnabled(true);
+            vacantes.getCmbEmpresa().setEnabled(true);
+            vacantes.getBtnCancelar().setEnabled(true);
             vacantes.getTxtSalario().setEnabled(true);
             vacantes.getBtnGuardar().setEnabled(true);
             vacantes.getCboCiudad().setEnabled(true);
@@ -474,9 +474,9 @@ public class Control {
         String[] datosEmpresas = datosCBOEmpresas();
         DefaultComboBoxModel dcboEmpresa = new DefaultComboBoxModel();
         for (int i = 0; i < datosEmpresas.length; i++) {
-            dcboEmpresa.addElement(datosCiudades[i]);
+            dcboEmpresa.addElement(datosEmpresas[i]);
         }
-        vacantes.getCboCiudad().setModel(dcbo);
+        vacantes.getCmbEmpresa().setModel(dcboEmpresa);
     }
 
     /**
@@ -1306,7 +1306,8 @@ public class Control {
         try {
             int x = 0;
             while (rs.next()) {
-                dato[x] = rs.getString("nombre") + rs.getInt("id");
+                String s = rs.getString("nombre") + " " + rs.getInt("nit");
+                dato[x] = s;
                 x++;
             }
         } catch (SQLException ex) {
