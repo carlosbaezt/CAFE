@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 
 public class Control {
     /* Declaracion de variabes */
+
     private Modelo.UsuarioVacante usvac = new UsuarioVacante();
     private DefaultComboBoxModel dcbm;
     private DefaultComboBoxModel dcbm2;
@@ -69,8 +70,8 @@ public class Control {
      *
      * @param bandera True si se desea iniciar el programa
      */
-    public void iniciar() {        
-            vistaP.setVisible(true);        
+    public void iniciar() {
+        vistaP.setVisible(true);
     }
 
     /**
@@ -78,12 +79,12 @@ public class Control {
      * principal
      */
     private void eventosVistaP(ActionEvent e) {
-        
-        if(e.getSource()==vistaP.getBtnNumeroCiudades()){
-        JOptionPane.showMessageDialog(null, "El numero de ciudades es: "+ciudad.obtenerNumeroCiudades());
+
+        if (e.getSource() == vistaP.getBtnNumeroCiudades()) {
+            JOptionPane.showMessageDialog(null, "El numero de ciudades es: " + ciudad.obtenerNumeroCiudades());
         }
         if (e.getSource() == vistaP.getBtnSalir()) {
-       System.exit(0);
+            System.exit(0);
         } else if (e.getSource() == vistaP.getBtnEmpresas()) {
             vistaPEmp.setVisible(true);
             vistaP.setVisible(false);
@@ -191,19 +192,7 @@ public class Control {
             nombre = opsEmpresas.getTxtNombre().getText();
             direccion = opsEmpresas.getTxtDireccion().getText();
             telefono = opsEmpresas.getTxtTelefono().getText();
-            int rows = ciudad.obtenerCiudad().getRowCount();
-            ResultSet rs = ciudad.obtenerTodo();
-            String dato[] = new String[rows];
-            try {
-                int x = 0;
-                while (rs.next()) {
-                    dato[x] = rs.getString("ciudad");
-                    x++;
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            idCiudad = dato[opsEmpresas.getCboCiudades().getSelectedIndex()];
+            idCiudad = obtenerIDString(ciudad.obtenerTodo(),ciudad.obtenerCiudad().getRowCount(),opsEmpresas.getCboCiudades().getSelectedIndex(),"ciudad");
             correo = opsEmpresas.getTxtCorreoE().getText();
             try {
                 nit = Integer.parseInt(opsEmpresas.getTxtNit().getText());
@@ -302,7 +291,7 @@ public class Control {
         if (e.getSource() == reportes.getBtnUsuariosRegistrados()) {
             reporte = new Reporte("Usuarios registrados");
             String ruta = "src/Reportes/usuarios.jrxml";
-            reporte.imprimirReporte(ruta,0,0);
+            reporte.imprimirReporte(ruta, 0, 0);
 
         } else if (e.getSource() == reportes.getBtnVerVacantes()) {
             reporte = new Reporte("vacantes por empresa");
@@ -315,7 +304,7 @@ public class Control {
             int cedula = Integer.parseInt(JOptionPane.showInputDialog(null, "Cedula "));
             reporte.imprimirReporte(ruta, 0, cedula);
 
-        }else if (e.getSource() == reportes.getBtnRegresar()) {
+        } else if (e.getSource() == reportes.getBtnRegresar()) {
             vistaP.setVisible(true);
             reportes.setVisible(false);
         }
@@ -328,8 +317,7 @@ public class Control {
     private void eventosVacantes(MouseEvent e) {
         vacantes.getTxtCargo().setEnabled(true);
         vacantes.getTxtIDVacante().setEnabled(true);
-        
-
+        vacantes.getCmbEmpresa().setEnabled(true);
         vacantes.getTxtSalario().setEnabled(true);
         vacantes.getBtnBorrar().setEnabled(true);
         vacantes.getBtnCancelar().setEnabled(true);
@@ -343,7 +331,6 @@ public class Control {
         String res5 = vacantes.getTblResultados().getModel().getValueAt(r, 4).toString();
         String res6 = vacantes.getTblResultados().getModel().getValueAt(r, 5).toString();
         vacantes.getTxtIDVacante().setText(res1);
-        
         vacantes.getTxtCargo().setText(res3);
         vacantes.getTxtSalario().setText(res5);
     }
@@ -353,11 +340,8 @@ public class Control {
             int id = Integer.parseInt(vacantes.getTxtIDVacante().getText());
             vacante.eliminarVacante(id);
             vacantes.getTblResultados().setModel(vacante.obtenerVacante());
-            /**/
             vacantes.getTxtCargo().setText("");
             vacantes.getTxtIDVacante().setText("");
-        
-
             vacantes.getTxtSalario().setText("");
             vacantes.getBtnBorrar().setEnabled(false);
             vacantes.getBtnCancelar().setEnabled(false);
@@ -367,24 +351,33 @@ public class Control {
         } else if (e.getSource() == vacantes.getBtnCancelar()) {
             vacantes.getTxtCargo().setText("");
             vacantes.getTxtIDVacante().setText("");
-        
-
             vacantes.getTxtSalario().setText("");
             vacantes.getBtnBorrar().setEnabled(false);
             vacantes.getBtnCancelar().setEnabled(false);
             vacantes.getBtnGuardar().setEnabled(false);
             vacantes.getBtnModificar().setEnabled(false);
             vacantes.getCboCiudad().setEnabled(false);
+            vacantes.getCmbEmpresa().setEnabled(false);
         } else if (e.getSource() == vacantes.getBtnGuardar()) {
             int idVacante, nitEmpresa;
             String cargo, nombre, idCiudad;
             double salario;
             idVacante = Integer.parseInt(vacantes.getTxtIDVacante().getText());
             salario = Double.parseDouble(vacantes.getTxtSalario().getText());
-            
-            //nitEmpresa = Integer.parseInt(vacantes.getTxtNit().getText());
             cargo = vacantes.getTxtCargo().getText();
-            
+            int rowsE = empresa.obtenerEmpresa().getRowCount();
+            String[] datosE = new String[rowsE];
+            ResultSet rsE = empresa.obtenerTodo();
+            try {
+                int x = 0;
+                while (rsE.next()) {
+                    datosE[x] = rsE.getString("nit");
+                    x++;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            nitEmpresa = Integer.parseInt(String.valueOf(datosE[vacantes.getCmbEmpresa().getSelectedIndex()]));
             int rows = ciudad.obtenerCiudad().getRowCount();
             String[] datos = new String[rows];
             ResultSet rs = ciudad.obtenerTodo();
@@ -402,24 +395,35 @@ public class Control {
             vacantes.getTblResultados().setModel(vacante.obtenerVacante());
             vacantes.getTxtCargo().setText("");
             vacantes.getTxtIDVacante().setText("");
-            
-
             vacantes.getTxtSalario().setText("");
+            vacantes.getTxtCargo().setEnabled(false);
+            vacantes.getTxtIDVacante().setEnabled(false);
+            vacantes.getTxtSalario().setEnabled(false);
             vacantes.getBtnBorrar().setEnabled(false);
             vacantes.getBtnCancelar().setEnabled(false);
             vacantes.getBtnGuardar().setEnabled(false);
             vacantes.getBtnModificar().setEnabled(false);
             vacantes.getCboCiudad().setEnabled(false);
-
         } else if (e.getSource() == vacantes.getBtnModificar()) {
             int idVacante, nitEmpresa;
             String cargo, nombre, idCiudad;
             double salario;
             idVacante = Integer.parseInt(vacantes.getTxtIDVacante().getText());
             salario = Double.parseDouble(vacantes.getTxtSalario().getText());
-            
             cargo = vacantes.getTxtCargo().getText();
-
+            int rowsE = empresa.obtenerEmpresa().getRowCount();
+            String[] datosE = new String[rowsE];
+            ResultSet rsE = empresa.obtenerTodo();
+            try {
+                int x = 0;
+                while (rsE.next()) {
+                    datosE[x] = rsE.getString("nit");
+                    x++;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            nitEmpresa = Integer.parseInt(String.valueOf(datosE[vacantes.getCmbEmpresa().getSelectedIndex()]));
             int rows = ciudad.obtenerCiudad().getRowCount();
             String[] datos = new String[rows];
             ResultSet rs = ciudad.obtenerTodo();
@@ -437,9 +441,10 @@ public class Control {
             vacantes.getTblResultados().setModel(vacante.obtenerVacante());
             vacantes.getTxtCargo().setText("");
             vacantes.getTxtIDVacante().setText("");
-            
-
             vacantes.getTxtSalario().setText("");
+            vacantes.getTxtCargo().setEnabled(false);
+            vacantes.getTxtIDVacante().setEnabled(false);
+            vacantes.getTxtSalario().setEnabled(false);
             vacantes.getBtnBorrar().setEnabled(false);
             vacantes.getBtnCancelar().setEnabled(false);
             vacantes.getBtnGuardar().setEnabled(false);
@@ -469,8 +474,7 @@ public class Control {
             dcbo.addElement(datosCiudades[i]);
         }
         vacantes.getCboCiudad().setModel(dcbo);
-        
-        
+
         String[] datosEmpresas = datosCBOEmpresas();
         DefaultComboBoxModel dcboEmpresa = new DefaultComboBoxModel();
         for (int i = 0; i < datosEmpresas.length; i++) {
@@ -1118,18 +1122,7 @@ public class Control {
         } else if (e.getSource() == ciudades.getBtnAgregar()) {
             nombre = ciudades.getTxtNombre().getText().toString().toUpperCase();
             int rows = dpto.obtenerDepartamento().getRowCount();
-            ResultSet rs = dpto.obtenerTodo();
-            String dato[] = new String[rows];
-            try {
-                int x = 0;
-                while (rs.next()) {
-                    dato[x] = rs.getString("departamento");
-                    x++;
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            departamento = dato[ciudades.getCboDepartamento().getSelectedIndex()].toUpperCase();
+            departamento = obtenerIDString(dpto.obtenerTodo(),dpto.obtenerDepartamento().getRowCount(),ciudades.getCboDepartamento().getSelectedIndex(),"departamento");
             ciudad.insertaEditarCiudad(idCiudad, nombre, departamento, true);
             ciudades.getTblResultados().setModel(ciudad.obtenerCiudad());
             ciudades.getTxtID().setText("");
@@ -1298,7 +1291,7 @@ public class Control {
         }
         return dato;
     }
-    
+
     private String[] datosCBOEmpresas() {
         int rows = empresa.obtenerEmpresa().getRowCount();
         ResultSet rs = empresa.obtenerTodo();
@@ -1314,5 +1307,40 @@ public class Control {
             Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
         }
         return dato;
+    }
+
+    /* Permite obtener una id entera  de cualquier tabla*/
+    private int obtenerIDInt(ResultSet RSX, int rows, int index, String obtener) {
+        int salida = 0;
+        try {
+            int[] datosTemporal = new int[rows];
+            ResultSet rs = RSX;
+            int x = 0;
+            while (rs.next()) {
+                datosTemporal[x] = rs.getInt(obtener);
+                x++;
+            }
+            salida = datosTemporal[index];
+        } catch (SQLException ex) {
+            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return salida;
+    }
+
+    private String obtenerIDString(ResultSet RSX, int rows, int index, String obtener) {
+        String salida = null;
+        try {
+            String[] datosTemporal = new String[rows];
+            ResultSet rs = RSX;
+            int x = 0;
+            while (rs.next()) {
+                datosTemporal[x] = rs.getString(obtener);
+                x++;
+            }
+            salida = datosTemporal[index];
+        } catch (SQLException ex) {
+            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return salida;
     }
 }
